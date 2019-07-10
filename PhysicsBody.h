@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h> 
+#include <vector> 
 #include "olcPixelGameEngine.h"
 class bs2dGravity;
 class PhysicsBody 
@@ -16,6 +17,7 @@ public:
 	olc::Pixel c;
 	PhysicsBody(double xPos, double yPos, double xVel, double yVel, double mas,olc::Pixel col);
 	PhysicsBody();
-	void accelerate(PhysicsBody* objects, int length,double dT);
+	void accelerate(std::vector<PhysicsBody>* objects, int length,double dT);
 	void move(double dT);
+	PhysicsBody* collisionCombine(std::vector<PhysicsBody>& objects);
 };
