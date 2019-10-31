@@ -3,12 +3,12 @@
 	bs2dGravity::bs2dGravity()
 	{
 		ShowCursor(FALSE);
-		bodys.resize(5);
-		bodys[0] =* new PhysicsBody(750, 500, 0, 0, 200000, olc::Pixel(255, 0, 0));
-		bodys[1] =* new PhysicsBody(850, 500, 0, sqrt(200000/100), 30, olc::Pixel(0, 123, 200));
-		bodys[2] = *new PhysicsBody(250, 500, 0, sqrt(200000 /500) * .314 * 1.5, 13, olc::Pixel(123, 0, 200));
-		bodys[3] = *new PhysicsBody(1050, 500, 0, sqrt(200000 / 300), 20, olc::Pixel(123, 170, 0));
-		bodys[4] = *new PhysicsBody(1250, 500, 0, sqrt(200000 / 500) * -.314 * 1.5, 13, olc::Pixel(123, 255, 15));
+		bodys.resize(1);
+		bodys[0] =* new PhysicsBody(750, 500, 0, 0, 2000000, olc::Pixel(255, 0, 0));
+		//bodys[1] =* new PhysicsBody(850, 500, 0, sqrt(200000/100), 30, olc::Pixel(0, 123, 200));
+		//bodys[2] = *new PhysicsBody(250, 500, 0, sqrt(200000 /500) * .314 * 1.5, 13, olc::Pixel(123, 0, 200));
+		//bodys[3] = *new PhysicsBody(1050, 500, 0, sqrt(200000 / 300), 20, olc::Pixel(123, 170, 0));
+		//bodys[4] = *new PhysicsBody(1250, 500, 0, sqrt(200000 / 500) * -.314 * 1.5, 13, olc::Pixel(123, 255, 15));
 		bs2dGravity::sAppName = "2D Newtonian Gravity Simulator - onelonecoder.com";
 	}
 	bool bs2dGravity::OnUserCreate() 
@@ -24,6 +24,7 @@
 		for (int i = 0; i < bs2dGravity::bodys.size(); i++)
 		{
 			FillCircle(bs2dGravity::bodys[i].xPPrev, bs2dGravity::bodys[i].yPPrev, bs2dGravity::bodys[i].r, olc::Pixel(0, 0, 0));
+			//FillCircle(bs2dGravity::bodys[i].xPPrev, bs2dGravity::bodys[i].yPPrev, 2, olc::Pixel(255, 255, 255));
 			//DrawLine(bs2dGravity::bodys[i].xP, bs2dGravity::bodys[i].yP, bs2dGravity::bodys[i].xP + bs2dGravity::bodys[i].xV * 20, bs2dGravity::bodys[i].yP, olc::Pixel(125, 100, 0));
 			//DrawLine(bs2dGravity::bodys[i].xP, bs2dGravity::bodys[i].yP, bs2dGravity::bodys[i].xP, bs2dGravity::bodys[i].yP + bs2dGravity::bodys[i].yV * 20, olc::Pixel(15, 245, 0));
 		}
@@ -94,20 +95,11 @@
 		return true;Z*/
 		for (int i = 0; i < bs2dGravity::bodys.size(); i++)
 		{
-			PhysicsBody* temp = bs2dGravity::bodys[i].collisionCombine(bs2dGravity::bodys);
-
-			if (temp != NULL)
+			int temp = bs2dGravity::bodys[i].collisionCombine(bs2dGravity::bodys);
+			if (temp >= 0)
 			{
-				for (int j = 0; j < bs2dGravity::bodys.size(); j++)
-				{
-					if (&bs2dGravity::bodys[j] == temp)
-					{
-						FillCircle(bs2dGravity::bodys[j].xP, bs2dGravity::bodys[j].yP, bs2dGravity::bodys[j].r, olc::Pixel(0, 0, 0));
-						bs2dGravity::bodys.erase(bs2dGravity::bodys.begin() + j);
-						break;
-					}
-				}
-				i = 0;
+				FillCircle(bs2dGravity::bodys[temp].xP, bs2dGravity::bodys[temp].yP, bs2dGravity::bodys[temp].r, olc::Pixel(0, 0, 0));
+				bs2dGravity::bodys.erase(bs2dGravity::bodys.begin() + temp);
 			}
 		}
 		return true;
