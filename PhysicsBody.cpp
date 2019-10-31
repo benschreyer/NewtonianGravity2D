@@ -33,8 +33,9 @@
 		PhysicsBody::xP += dT * xV;
 		PhysicsBody::yP += dT * yV;
 	}
-	PhysicsBody* PhysicsBody::collisionCombine(std::vector<PhysicsBody>& objects)
+	int PhysicsBody::collisionCombine(std::vector<PhysicsBody>& objects)
 	{
+		int myIndex = -1;
 		for (int i = 0; i < objects.size(); i++)
 		{
 			
@@ -44,9 +45,12 @@
 				{
 					if (PhysicsBody::m >= (objects)[i].m)
 					{
+						double oldM = PhysicsBody::m;
 						PhysicsBody::m += (objects)[i].m;
 						PhysicsBody::r = pow((m / 3.14), 1.0 / 3.0) * 1.3;
-						return &objects[i];
+						PhysicsBody::xV =(((objects)[i]).xV * ((objects)[i]).m +oldM * PhysicsBody::xV )/ PhysicsBody::m;
+						PhysicsBody::yV = (((objects)[i]).yV * ((objects)[i]).m + oldM * PhysicsBody::yV) / PhysicsBody::m;
+						return i;
 						//(objects).erase((objects).begin() + i);
 						
 						
@@ -54,14 +58,26 @@
 					}
 					else
 					{
-						(objects)[i].m += PhysicsBody::m;
-						objects[i].r = pow((objects[i].m / 3.14), 1.0 / 3.0) * 1.3;
-						return this;
+				
+						if (myIndex >= 0)
+						{
+							return myIndex;
+						}
+						for (int j = i + 1; j < objects.size(); j++)
+						{
+							if (&(objects)[j] == this)
+								return j;
+						}
+
 						
 						
 					}
 				}
 			}
+			else
+			{
+				myIndex = i;
+			}
 		}
-		return NULL;
+		return -1;
 	}
